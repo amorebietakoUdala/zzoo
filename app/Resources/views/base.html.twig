@@ -7,7 +7,7 @@
 
     {% block stylesheets %}
         <!-- Bootstrap -->
-        <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet" media="screen">
+        <link href="{{ asset('bundles/app/css/bootstrap.min.css') }}" rel="stylesheet" media="screen">
         <link href="{{ asset('bundles/app/css/backend.css') }}" rel="stylesheet" media="screen">
 
         <!-- HTML5 Shim and Respond.js add IE8 support of HTML5 elements and media queries -->
@@ -45,9 +45,9 @@
 
 {% block javascripts %}
     <!-- jQuery (necessary for Bootstraps JavaScript plugins) -->
-    <script src="{{ asset('js/jquery.js') }}"></script>
+    <script src="{{ asset('bundles/app/js/jquery.js') }}"></script>
     <!-- Include all JavaScripts, compiled by Assetic -->
-    <script src="{{ asset('js/bootstrap.js') }}"></script>
+    <script src="{{ asset('bundles/app/js/bootstrap.js') }}"></script>
 
 {% endblock %}
 </body>

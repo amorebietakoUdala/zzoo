@@ -60,11 +60,12 @@ class ApiController extends FOSRestController
     {
         $em = $this->getDoctrine()->getManager();
         /** @var  $query \Doctrine\DBAL\Query\QueryBuilder */
-        $query = $em->createQuery('
+        $query = $em->createQuery( /** @lang text */
+            '
             SELECT o 
             FROM AppBundle:Ordenantza o
                INNER JOIN o.udala u
-            WHERE u.kodea = :udalkodea
+            WHERE u.kodea = :udalkodea AND ((o.ezabatu IS NULL) or (o.ezabatu <> 1))
             ');
         $query->setParameter( 'udalkodea', $kodea );
         $ordenantzak = $query->getResult();
@@ -149,15 +150,27 @@ class ApiController extends FOSRestController
      * )
      *
      *
-     * @return array data
+     * @param $ordenantzaid
      *
+     * @return View
      * @Annotations\View()
      * @Get("/tributuak/{ordenantzaid}")
      */
     public function getAtalakAction($ordenantzaid)
     {
         $em         = $this->getDoctrine()->getManager();
-        $atalak = $em->getRepository('AppBundle:Atala')->findBy(array('ordenantza'=>$ordenantzaid));
+//        $atalak = $em->getRepository('AppBundle:Atala')->findBy(array('ordenantza'=>$ordenantzaid));
+        /** @var  $query \Doctrine\DBAL\Query\QueryBuilder */
+        $query = $em->createQuery( /** @lang text */
+            '
+            SELECT a 
+            FROM AppBundle:Atala a
+               INNER JOIN a.ordenantza o
+            WHERE o.id = :ordenantzaid AND ((a.ezabatu IS NULL) or (a.ezabatu <> 1))
+            ');
+        $query->setParameter( 'ordenantzaid', $ordenantzaid );
+        $atalak = $query->getResult();
+
         $view = View::create();
         $view->setData($atalak);
         header('content-type: application/json; charset=utf-8');
@@ -198,7 +211,7 @@ class ApiController extends FOSRestController
      * )
      *
      *
-     * @return array data
+     * @return View
      *
      * @Annotations\View()
      * @Get("/udalzergak/{udalaid}")
@@ -207,7 +220,13 @@ class ApiController extends FOSRestController
     {
         $em = $this->getDoctrine()->getManager();
         /** @var  $query \Doctrine\DBAL\Query\QueryBuilder */
-        $query = $em->createQuery('SELECT p.id, p.kodea_prod, p.izenburuaeu_prod, p.izenburuaes_prod FROM AppBundle:Azpiatala p WHERE p.udala=:udalaid');
+        $query = $em->createQuery(
+            /** @lang text */
+            'SELECT p.id, p.kodea_prod, p.izenburuaeu_prod, p.izenburuaes_prod 
+                FROM AppBundle:Azpiatala p 
+                WHERE p.udala=:udalaid AND ((p.ezabatu IS NULL) or (p.ezabatu <> 1))
+                '
+        );
         $query->setParameter( 'udalaid', $udalaid );
         $azpiatalak = $query->getResult();
 
@@ -231,8 +250,9 @@ class ApiController extends FOSRestController
      * )
      *
      *
-     * @return array data
+     * @param $tributuaid
      *
+     * @return View
      * @Annotations\View()
      * @Get("/zergak/{tributuaid}")
      */
@@ -240,7 +260,12 @@ class ApiController extends FOSRestController
     {
         $em = $this->getDoctrine()->getManager();
         /** @var  $query \Doctrine\DBAL\Query\QueryBuilder */
-        $query = $em->createQuery('SELECT p.id, p.kodea_prod, p.izenburuaeu_prod,p.izenburuaes_prod  FROM AppBundle:Azpiatala p WHERE p.atala=:atalaid');
+        $query = $em->createQuery( /** @lang text */
+            '
+                SELECT p.id, p.kodea_prod, p.izenburuaeu_prod,p.izenburuaes_prod  
+                    FROM AppBundle:Azpiatala p 
+                WHERE p.atala=:atalaid AND ((p.ezabatu IS NULL) or (p.ezabatu <> 1))
+          ');
         $query->setParameter( 'atalaid', $tributuaid );
         $azpiatalak = $query->getResult();
 
