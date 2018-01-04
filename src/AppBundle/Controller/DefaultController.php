@@ -11,6 +11,19 @@ use AppBundle\Entity\Udala;
 
 class DefaultController extends Controller
 {
+     /**
+     * @Route("/ordenantzak/{udala}/{_locale}/", name="ordenantzakList", 
+     *    requirements={
+     *           "_locale": "eu|es"
+     * })
+     */
+    public function ordenantzakListAction(Request $request, $udala)
+    {
+        return $this->render('default\list.html.twig', array(
+            'udala' => $udala
+        ));
+    }
+
     /**
      * @Route("/ordenantza/{id}", name="ordenantzabat")
      */

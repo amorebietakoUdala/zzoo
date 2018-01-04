@@ -189,3 +189,26 @@ h4  {
 .btnsubmenu:hover {
     border: 1px solid #8c8c8c;
 }
+
+#logoa {
+    width: auto;
+    height: 70px;
+}
+
+#logo_lerroa img {
+    height: 70px;
+}
+
+#logo_lerroa {
+    height: auto;
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #e7e7e7;
+}
+
+#menu_lerroa {
+    margin-bottom: 5px;
+}
+
+#itzuli_esteka {
+    padding-top: 22px;
+}

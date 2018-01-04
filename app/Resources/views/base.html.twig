@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="{{ app.request.locale}}">
 <head>
 
     <title>{% block izenburua %}Zerga Ordenantzak {% endblock %}</title>
@@ -38,7 +38,8 @@
 
 <body data-spy="scroll">
 
-<div class="container">
+<div class="container-fluid">
+    {% block menua %}{% endblock %}
     {% block body %}{% endblock %}
 </div> <!-- /container -->
 

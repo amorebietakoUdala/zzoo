@@ -1,0 +1,181 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+	ul#ulzzoo {
+	    margin-left:14px !important;
+	}
+	ul#ulzzoo li {
+	    list-style-type: none;
+	}
+	.popover {
+            z-index: 9999 !important;
+        }
+
+        .popover .editable-buttons {
+            margin-left: 15px !important;
+        }
+
+        .divAkzioak {
+            display: block;
+            height: 18px;
+            text-align: right;
+        }
+    </style>
+{% endblock %}
+
+{% block menua %}
+    <nav id="logo_lerroa" class="navbar navbar-fixed-top">
+	<div class="container ">
+	    <div class="navbar-header">
+		<img id="logoa" src="{{ asset('bundles/app/img/logo-zzoo.png') }}" alt="Amorebieta-Etxanoko Udala"/>
+	    </div>
+		<span id="itzuli_esteka" class="navbar-right"><a href="https://www.amorebieta-etxano.eus/">{{ "Volver a la web del ayuntamiento" | trans }}</a></span>
+	</div>
+    </nav>
+    <nav id="menu_lerroa" class="navbar navbar-default">
+	<div class="container">
+	    <div class="navbar-header">
+		<a class="navbar-brand"></a>
+		<ul class="nav navbar-nav">
+		    <li class="list-inline"><a
+				href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({'_locale': 'es'})) }}">ES</a>
+		    </li>
+		    <li class="list-inline"><a
+				href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({'_locale': 'eu'})) }}">EU</a>
+		    </li>
+		</ul>
+	    </div>
+	    <div id="navbar" class="navbar-collapse collapse navbar-right">
+	    </div>
+	</div>
+    </nav>
+{% endblock %}
+
+{% block body %}
+    <div class="modal fade" id="nireModal" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+    <div class="modal-header"><button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true">×</span></button>
+
+    <h4 class="modal-title" id="modalTitle">&nbsp;</h4>
+    </div>
+
+    <div class="modal-body" id="modalContent">&nbsp;</div>
+
+    <div class="modal-footer"><button class="btn btn-primary" data-dismiss="modal" type="button">Cerrar</button></div>
+    </div>
+    </div>
+    <!-- /.modal-content --></div>
+    <!-- /.modal-dialog --><!-- /.modal -->
+
+    <ul id="ulzzoo">
+	
+    </ul>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent()}}
+<script type="text/javascript">
+    $(document).ready(function() {
+	var locale = $('html').attr('lang');
+
+	$('[data-toggle="tooltip"]').tooltip()
+	    var items = [];
+	    var url = "https://aplikazioak.amorebieta-etxano.eus:448/zzoo/api/ordenantzakbykodea/48340.json";
+
+	    var bootstrap_enabled = (typeof $().modal == 'function');
+	    $('body').on('click', 'a.btntaula', function () {
+
+		var miid = $(this).data('id');
+		var url = "https://aplikazioak.amorebieta-etxano.eus:448/zzoo/api/zerga/" + miid + ".json";
+		var nModal = $('#nireModal');
+		$('#modalContent').empty();
+		$.getJSON(url, function(data) {
+		    $('#modalTitle').html(locale == 'es' ? data.izenburuaes_prod : data.izenburuaeu_prod );
+		    $('#modalContent').html("<p id='parrafoaurretik'></p><table id='kostuTaula' class='table table-bordered table-hover'></table><p id='parrafoondoren'></p>");
+
+		    var pAurretik = data.parrafoak;
+		    if ( pAurretik.length > 0 ) {
+			$.each( pAurretik, function( i, item ) {
+			    $('#parrafoaurretik').append(
+			      locale == 'es' ? item.testuaes_prod : item.testuaeu_prod
+			    );
+			});
+		    }
+
+		    var kontzeptuak = data.kontzeptuak;
+		    $.each( kontzeptuak, function( i, item ) {
+			var baldintza = item.baldintza;
+
+			if (!baldintza) {
+			    var $tr = $('<tr>').append(
+				$('<td>').text(locale == 'es' ? item.kontzeptuaes_prod : item.kontzeptuaeu_prod),
+				$('<td>').text(item.kopurua_prod),
+				$('<td>').text(item.unitatea_prod)
+			    ).appendTo('#kostuTaula');
+			} else {
+			    var $tr = $('<tr>').append(
+				$('<td>').text(locale == 'es' ? item.kontzeptuaes_prod : item.kontzeptuaeu_prod + '(' + (locale == 'es' ? baldintza.baldintzaes : baldintza.baldintzaeu) + ')'),
+				$('<td>').text(item.kopurua_prod),
+				$('<td>').text(item.unitatea_prod + '(' + baldintza.baldintzaes + ')')
+			    ).appendTo('#kostuTaula');
+			}
+		    });
+		    var pOndoren = data.parrafoakondoren;
+		    if ( pOndoren.length > 0 ) {
+			$.each( pOndoren, function( i, item ) {
+			    $('#parrafoondoren').append(
+			      locale == 'es' ? item.testuaes_prod : item.testuaeu_prod
+			    );
+			});
+		    }
+
+		});
+
+		$('#nireModal').modal()
+	    });
+
+	    $.getJSON(url, function(data) {
+		$.each( data, function( i, ordenantza ) {
+
+		    items.push('<li"><a data-toggle="tooltip" data-container="body" data-placement="top" title="Haz click aquí para ver el texto de la ordenanza" target="_blank"  href="https://aplikazioak.amorebieta-etxano.eus:448/zzoo/ordenantza/' + ordenantza.id + '">' + ordenantza.kodea_prod + ' - ' + ( locale == 'es' ? ordenantza.izenburuaes_prod : ordenantza.izenburuaeu_prod ) +'</a></li>');
+		    var atalak = ordenantza.atalak;
+		    $.each( atalak, function( i1, atala ) {
+			if (atala.izenburuaes_prod !== ""){
+			    if ( ( 'kodea_prod' in atala ) && ( 'izenburuaes_prod' in atala ) ) {
+				items.push(
+				    '<li><ul class="nirul"><li class="nireli"><a target="_blank"  href="https://aplikazioak.amorebieta-etxano.eus:448/zzoo/ordenantza/' + ordenantza.id   + '#' + ordenantza.id + '-' + atala.id +'">' + atala.kodea_prod + ' - ' +  ( locale == 'es' ? atala.izenburuaes_prod : atala.izenburuaeu_prod ) +'</a></li></ul></li>'
+				);
+			    }
+			}
+
+			var azpiatalak = atala.azpiatalak;
+			$.each( azpiatalak, function( i2, azpiatala ) {
+
+			    items.push(
+				'<li><ul class="barneul" style="padding-left: 20px !important;">' +
+				'   <li class="aupahi" style="list-style:none;">' +
+				'       <ul class="besteul" >' +
+				'           <li class="barnebane">' +
+				'               <a class="btntaula"   data-toggle="tooltip" data-container="body"  data-placement="top" title="Haz click aqui para ver la tabla de costes" data-id="'+azpiatala.id+'" href="javascript:void(0);">' + azpiatala.kodea_prod + ' ' + ( locale == 'es' ? azpiatala.izenburuaes_prod : azpiatala.izenburuaeu_prod ) +'</a>' +
+				'           </li>' +
+				'       </ul>' +
+				'   </li>' +
+				'</ul></li>'
+			    );
+			});
+
+		    });
+
+		});
+		$('#ulzzoo').append( items.join('') );
+      $('[data-toggle="tooltip"]').tooltip();
+	    });
+
+	});
+
+    </script>
+    
+{% endblock%}
