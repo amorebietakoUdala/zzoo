@@ -30,7 +30,7 @@ class ApiController extends FOSRestController
 {
 
     /**
-     * @Route("/")
+     * @Route("/", name="api")
      */
     public function indexAction ( Request $request )
     {
@@ -64,8 +64,9 @@ class ApiController extends FOSRestController
             '
             SELECT o 
             FROM AppBundle:Ordenantza o
-               INNER JOIN o.udala u
+               INNER JOIN AppBundle:Udala u
             WHERE u.kodea = :udalkodea AND ((o.ezabatu IS NULL) or (o.ezabatu <> 1))
+	    ORDER BY o.kodea
             ');
         $query->setParameter( 'udalkodea', $kodea );
         $ordenantzak = $query->getResult();
