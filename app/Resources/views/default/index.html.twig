@@ -212,10 +212,24 @@
                             </td>
                         </tr>
                     {% endif %}
-
-
                     </tbody>
                 </table>
+
+                {% for p in azpiatala.parrafoakondoren  if p.ezabatu!= 1 %}
+                    <div class="row ordenantzaparrafoa">
+                        <div class="col-xs-6">
+                            <div class="divTextua">
+                                {{ p.testuaeu | raw }}
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="divTextua">
+                                {{ p.testuaes | raw }}
+                            </div>
+                        </div>
+                    </div>
+
+                {% endfor %}
 
             {% endfor %}
 
