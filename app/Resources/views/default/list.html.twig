@@ -27,7 +27,7 @@
 
 {% block menua %}
     <nav id="logo_lerroa" class="navbar navbar-fixed-top">
-	<div class="container ">
+	<div class="container">
 	    <div class="navbar-header">
 		<img id="logoa" src="{{ asset('bundles/app/img/logo-zzoo.png') }}" alt="Amorebieta-Etxanoko Udala"/>
 	    </div>
@@ -35,7 +35,7 @@
 	</div>
     </nav>
     <nav id="menu_lerroa" class="navbar navbar-default">
-	<div class="container">
+	<div class="container-fluid">
 	    <div class="navbar-header">
 		<a class="navbar-brand"></a>
 		<ul class="nav navbar-nav">
@@ -69,7 +69,7 @@
     </div>
     <!-- /.modal-content --></div>
     <!-- /.modal-dialog --><!-- /.modal -->
-
+    <div class="container-fluid alert alert-info" role="alert">{{ "La información ofrecida a continuación carece de validez jurídica y se ofrece sólo a efectos informativos" | trans }}</div>
     <ul id="ulzzoo">
 	
     </ul>
@@ -83,13 +83,13 @@
 
 	$('[data-toggle="tooltip"]').tooltip()
 	    var items = [];
-	    var url = "https://aplikazioak.amorebieta-etxano.eus:448/zzoo/api/ordenantzakbykodea/48340.json";
+	    var url = "{{ url('api') }}ordenantzakbykodea/48340.json";
 
 	    var bootstrap_enabled = (typeof $().modal == 'function');
 	    $('body').on('click', 'a.btntaula', function () {
 
 		var miid = $(this).data('id');
-		var url = "https://aplikazioak.amorebieta-etxano.eus:448/zzoo/api/zerga/" + miid + ".json";
+		var url = "{{ url('api') }}zerga/" + miid + ".json";
 		var nModal = $('#nireModal');
 		$('#modalContent').empty();
 		$.getJSON(url, function(data) {
@@ -140,13 +140,13 @@
 	    $.getJSON(url, function(data) {
 		$.each( data, function( i, ordenantza ) {
 
-		    items.push('<li"><a data-toggle="tooltip" data-container="body" data-placement="top" title="Haz click aquí para ver el texto de la ordenanza" target="_blank"  href="https://aplikazioak.amorebieta-etxano.eus:448/zzoo/ordenantza/' + ordenantza.id + '">' + ordenantza.kodea_prod + ' - ' + ( locale == 'es' ? ordenantza.izenburuaes_prod : ordenantza.izenburuaeu_prod ) +'</a></li>');
+		    items.push('<li"><a data-toggle="tooltip" data-container="body" data-placement="top" title="Haz click aquí para ver el texto de la ordenanza" target="_blank"  href="{{ url('api') }}ordenantza/' + ordenantza.id + '">' + ordenantza.kodea_prod + ' - ' + ( locale == 'es' ? ordenantza.izenburuaes_prod : ordenantza.izenburuaeu_prod ) +'</a></li>');
 		    var atalak = ordenantza.atalak;
 		    $.each( atalak, function( i1, atala ) {
 			if (atala.izenburuaes_prod !== ""){
 			    if ( ( 'kodea_prod' in atala ) && ( 'izenburuaes_prod' in atala ) ) {
 				items.push(
-				    '<li><ul class="nirul"><li class="nireli"><a target="_blank"  href="https://aplikazioak.amorebieta-etxano.eus:448/zzoo/ordenantza/' + ordenantza.id   + '#' + ordenantza.id + '-' + atala.id +'">' + atala.kodea_prod + ' - ' +  ( locale == 'es' ? atala.izenburuaes_prod : atala.izenburuaeu_prod ) +'</a></li></ul></li>'
+				    '<li><ul class="nirul"><li class="nireli"><a target="_blank"  href="{{ url('api') }}ordenantza/' + ordenantza.id   + '#' + ordenantza.id + '-' + atala.id +'">' + atala.kodea_prod + ' - ' +  ( locale == 'es' ? atala.izenburuaes_prod : atala.izenburuaeu_prod ) +'</a></li></ul></li>'
 				);
 			    }
 			}
