@@ -140,13 +140,13 @@
 	    $.getJSON(url, function(data) {
 		$.each( data, function( i, ordenantza ) {
 
-		    items.push('<li"><a data-toggle="tooltip" data-container="body" data-placement="top" title="Haz click aquí para ver el texto de la ordenanza" target="_blank"  href="{{ url('api') }}ordenantza/' + ordenantza.id + '">' + ordenantza.kodea_prod + ' - ' + ( locale == 'es' ? ordenantza.izenburuaes_prod : ordenantza.izenburuaeu_prod ) +'</a></li>');
+		    items.push('<li"><a data-toggle="tooltip" data-container="body" data-placement="top" title="Haz click aquí para ver el texto de la ordenanza" target="_blank"  href="/ordenantza/' + ordenantza.id + '">' + ordenantza.kodea_prod + ' - ' + ( locale == 'es' ? ordenantza.izenburuaes_prod : ordenantza.izenburuaeu_prod ) +'</a></li>');
 		    var atalak = ordenantza.atalak;
 		    $.each( atalak, function( i1, atala ) {
 			if (atala.izenburuaes_prod !== ""){
 			    if ( ( 'kodea_prod' in atala ) && ( 'izenburuaes_prod' in atala ) ) {
 				items.push(
-				    '<li><ul class="nirul"><li class="nireli"><a target="_blank"  href="{{ url('api') }}ordenantza/' + ordenantza.id   + '#' + ordenantza.id + '-' + atala.id +'">' + atala.kodea_prod + ' - ' +  ( locale == 'es' ? atala.izenburuaes_prod : atala.izenburuaeu_prod ) +'</a></li></ul></li>'
+				    '<li><ul class="nirul"><li class="nireli"><a target="_blank"  href="/ordenantza/' + ordenantza.id   + '#' + ordenantza.id + '-' + atala.id +'">' + atala.kodea_prod + ' - ' +  ( locale == 'es' ? atala.izenburuaes_prod : atala.izenburuaeu_prod ) +'</a></li></ul></li>'
 				);
 			    }
 			}
