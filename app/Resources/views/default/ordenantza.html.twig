@@ -187,8 +187,28 @@
                             </td>
                         </tr>
                     {% endif %}
-
-
+                    <tr>
+                        <td colspan="4">
+                            {% for p in azpiatala.parrafoakondoren  if p.ezabatu!= 1 %}
+                                <div class="row azpiatala">
+                                    <div class="divEditable col-xs-6">
+                                        <div class="divEditableazpiatalaparrafoa">
+                                            <div class="divTextua" id="azpiatalaparrafoa{{ p.id }}">
+                                                <span class="" style="display: block;">{{ p.testuaeuProd | raw }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="divEditable col-xs-6">
+                                        <div class="divEditableazpiatalaparrafoa">
+                                            <div class="divTextua">
+                                                <span class="" style="display: block;">{{ p.testuaesProd | raw }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
 
