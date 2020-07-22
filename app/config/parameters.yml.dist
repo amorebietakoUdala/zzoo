@@ -20,3 +20,6 @@ parameters:
 
     alias: /zzoo
     doc_path: doc
+
+    # Azterketen azpiatalaren kodea
+    azterketa_azpiatala: 62

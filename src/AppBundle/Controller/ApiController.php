@@ -2,23 +2,13 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Form\AtalaType;
 use AppBundle\Entity\Atala;
-
-
 use FOS\RestBundle\Controller\Annotations;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\FOSRestController;
-use FOS\RestBundle\Request\ParamFetcherInterface;
 use FOS\RestBundle\View\View;
-
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Form\FormTypeInterface;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 /**
@@ -28,15 +18,13 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
  */
 class ApiController extends FOSRestController
 {
-
     /**
      * @Route("/", name="api")
      */
-    public function indexAction ( Request $request )
+    public function indexAction(Request $request)
     {
         return $this->redirectToRoute('nelmio_api_doc_index', array(), 301);
     }
-
 
 //    ORDENANTZAK
 
@@ -51,7 +39,6 @@ class ApiController extends FOSRestController
      *   }
      * )
      *
-     *
      * @return array|View
      * @Annotations\View()
      * @Get("/ordenantzakbykodea/{kodea}.{_format}")
@@ -59,8 +46,8 @@ class ApiController extends FOSRestController
     public function getOrdenantzakbykodeaAction($kodea)
     {
         $em = $this->getDoctrine()->getManager();
-        /** @var  $query \Doctrine\DBAL\Query\QueryBuilder */
-        $query = $em->createQuery( /** @lang text */
+        /** @var $query \Doctrine\DBAL\Query\QueryBuilder */
+        $query = $em->createQuery( /* @lang text */
             '
             SELECT o 
             FROM AppBundle:Ordenantza o
@@ -68,16 +55,15 @@ class ApiController extends FOSRestController
             WHERE u.kodea = :udalkodea AND ((o.ezabatu IS NULL) or (o.ezabatu <> 1))
 	    ORDER BY o.kodea
             ');
-        $query->setParameter( 'udalkodea', $kodea );
+        $query->setParameter('udalkodea', $kodea);
         $ordenantzak = $query->getResult();
         $view = View::create();
-        $view->setData( $ordenantzak );
-        header( 'content-type: application/json; charset=utf-8' );
-        header( "access-control-allow-origin: *" );
+        $view->setData($ordenantzak);
+        header('content-type: application/json; charset=utf-8');
+        header('access-control-allow-origin: *');
 
         return $view;
     }
-
 
     /**
      * Udal baten Ordenantza zerrenda.
@@ -90,7 +76,6 @@ class ApiController extends FOSRestController
      *   }
      * )
      *
-     *
      * @return array|View
      *
      * @Annotations\View()
@@ -98,26 +83,20 @@ class ApiController extends FOSRestController
      */
     public function getOrdenantzakAction($udalaid)
     {
-
         $em = $this->getDoctrine()->getManager();
-        $ordenantzak = $em->getRepository( 'AppBundle:Ordenantza' )->findBy(
-            array (
+        $ordenantzak = $em->getRepository('AppBundle:Ordenantza')->findBy(
+            array(
                 'udala.kodea' => $udalaid,
             )
         );
 
         $view = View::create();
-        $view->setData( $ordenantzak );
-        header( 'content-type: application/json; charset=utf-8' );
-        header( "access-control-allow-origin: *" );
+        $view->setData($ordenantzak);
+        header('content-type: application/json; charset=utf-8');
+        header('access-control-allow-origin: *');
 
         return $view;
     }
-
-
-
-
-
 
     /**
      * @ApiDoc(
@@ -128,14 +107,15 @@ class ApiController extends FOSRestController
      * @Annotations\View()
      * @Get("/ordenantza/{id}")
      */
-    public function getOrdenantzaAction($id){
-        $em         = $this->getDoctrine()->getManager();
+    public function getOrdenantzaAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
         $ordenantza = $em->getRepository('AppBundle:Ordenantza')->findById($id);
         header('content-type: application/json; charset=utf-8');
-        header("access-control-allow-origin: *");
+        header('access-control-allow-origin: *');
+
         return $ordenantza;
     }
-
 
 //    ATALAK
 
@@ -150,7 +130,6 @@ class ApiController extends FOSRestController
      *   }
      * )
      *
-     *
      * @param $ordenantzaid
      *
      * @return View
@@ -159,25 +138,25 @@ class ApiController extends FOSRestController
      */
     public function getAtalakAction($ordenantzaid)
     {
-        $em         = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
 //        $atalak = $em->getRepository('AppBundle:Atala')->findBy(array('ordenantza'=>$ordenantzaid));
-        /** @var  $query \Doctrine\DBAL\Query\QueryBuilder */
-        $query = $em->createQuery( /** @lang text */
+        /** @var $query \Doctrine\DBAL\Query\QueryBuilder */
+        $query = $em->createQuery( /* @lang text */
             '
             SELECT a 
             FROM AppBundle:Atala a
                INNER JOIN a.ordenantza o
             WHERE o.id = :ordenantzaid AND ((a.ezabatu IS NULL) or (a.ezabatu <> 1))
             ');
-        $query->setParameter( 'ordenantzaid', $ordenantzaid );
+        $query->setParameter('ordenantzaid', $ordenantzaid);
         $atalak = $query->getResult();
 
         $view = View::create();
         $view->setData($atalak);
         header('content-type: application/json; charset=utf-8');
-        header("access-control-allow-origin: *");
-        return $view;
+        header('access-control-allow-origin: *');
 
+        return $view;
     }
 
     /**
@@ -189,14 +168,15 @@ class ApiController extends FOSRestController
      * @Annotations\View()
      * @Get("/tributua/{id}")
      */
-    public function getAtalaAction($id){
-        $em         = $this->getDoctrine()->getManager();
+    public function getAtalaAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
         $atala = $em->getRepository('AppBundle:Atala')->findById($id);
         header('content-type: application/json; charset=utf-8');
-        header("access-control-allow-origin: *");
+        header('access-control-allow-origin: *');
+
         return $atala;
     }
-
 
 //    AZPIATALAK
 
@@ -211,7 +191,6 @@ class ApiController extends FOSRestController
      *   }
      * )
      *
-     *
      * @return View
      *
      * @Annotations\View()
@@ -220,23 +199,23 @@ class ApiController extends FOSRestController
     public function getAzpiatalakudalaAction($udalaid)
     {
         $em = $this->getDoctrine()->getManager();
-        /** @var  $query \Doctrine\DBAL\Query\QueryBuilder */
+        /** @var $query \Doctrine\DBAL\Query\QueryBuilder */
         $query = $em->createQuery(
-            /** @lang text */
+            /* @lang text */
             'SELECT p.id, p.kodea_prod, p.izenburuaeu_prod, p.izenburuaes_prod 
                 FROM AppBundle:Azpiatala p 
                 WHERE p.udala=:udalaid AND ((p.ezabatu IS NULL) or (p.ezabatu <> 1))
                 '
         );
-        $query->setParameter( 'udalaid', $udalaid );
+        $query->setParameter('udalaid', $udalaid);
         $azpiatalak = $query->getResult();
 
         $view = View::create();
         $view->setData($azpiatalak);
         header('content-type: application/json; charset=utf-8');
-        header("access-control-allow-origin: *");
-        return $view;
+        header('access-control-allow-origin: *');
 
+        return $view;
     }
 
     /**
@@ -250,7 +229,6 @@ class ApiController extends FOSRestController
      *   }
      * )
      *
-     *
      * @param $tributuaid
      *
      * @return View
@@ -260,26 +238,25 @@ class ApiController extends FOSRestController
     public function getAzpiatalakAction($tributuaid)
     {
         $em = $this->getDoctrine()->getManager();
-        /** @var  $query \Doctrine\DBAL\Query\QueryBuilder */
-        $query = $em->createQuery( /** @lang text */
+        /** @var $query \Doctrine\DBAL\Query\QueryBuilder */
+        $query = $em->createQuery( /* @lang text */
             '
                 SELECT p.id, p.kodea_prod, p.izenburuaeu_prod,p.izenburuaes_prod  
                     FROM AppBundle:Azpiatala p 
                 WHERE p.atala=:atalaid AND ((p.ezabatu IS NULL) or (p.ezabatu <> 1))
           ');
-        $query->setParameter( 'atalaid', $tributuaid );
+        $query->setParameter('atalaid', $tributuaid);
         $azpiatalak = $query->getResult();
 
         $view = View::create();
         $view->setData($azpiatalak);
         header('content-type: application/json; charset=utf-8');
-        header("access-control-allow-origin: *");
-        return $view;
+        header('access-control-allow-origin: *');
 
+        return $view;
     }
 
     /**
-     *
      * @ApiDoc(
      *   resource = true,
      *   description = "Zerga baten informazioa eskuratu",
@@ -288,7 +265,6 @@ class ApiController extends FOSRestController
      *   }
      * )
      *
-     *
      * @return View
      *
      * @Annotations\View()
@@ -296,15 +272,51 @@ class ApiController extends FOSRestController
      */
     public function getAzpiatalaAction($id)
     {
-        $em         = $this->getDoctrine()->getManager();
-        $azpiatalak = $em->getRepository( 'AppBundle:Azpiatala' )->findOneById( $id );
+        $em = $this->getDoctrine()->getManager();
+        $azpiatalak = $em->getRepository('AppBundle:Azpiatala')->findOneById($id);
 
         $view = View::create();
         $view->setData($azpiatalak);
         header('content-type: application/json; charset=utf-8');
-        header("access-control-allow-origin: *");
-        return $view;
+        header('access-control-allow-origin: *');
 
+        return $view;
     }
 
+    /**
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Azterketa kategoria baten azterketan parte hartzeko tasa itzuli.",
+     *   statusCodes = {
+     *     200 = "Zuzena denean"
+     *   }
+     * )
+     *
+     * @return View
+     *
+     * @Annotations\View()
+     * @Get("/exam/{kodea}.{_format}")
+     */
+    public function getExamPricesAction($kodea)
+    {
+        /* 'Tasas según grupo azpiatalaren kodea azterketen prezioak bilatzeko
+         * Gero atal horretan kodea_prod 001, 002, 003 eta 004 izan behar dira.
+         * Bestela erreziboen aplikazioan categoriak ezingo ditu automatikoki hartu.
+         * Gainera "A1", "A2", "C1" eta "C2, E eta AP" izan behar dira zehazki
+         * 001, 002, 003, 004 erreziboen aplikazioak horrela suposatzen du direla.
+         */
+        $azterketaAzpiatala = $this->container->getParameter('azterketa_azpiatala');
+        $em = $this->getDoctrine()->getManager();
+        $kontzeptua = $em->getRepository('AppBundle:Kontzeptua')->findOneBy([
+            'azpiatala' => $azterketaAzpiatala,
+            'kodea_prod' => $kodea,
+        ]);
+        $view = View::create();
+//        $view->setData(['price' => str_replace(',', '.', $kontzeptua->getKopuruaProd())]);
+        $view->setData(str_replace(',', '.', $kontzeptua->getKopuruaProd()));
+        header('content-type: application/json; charset=utf-8');
+        header('access-control-allow-origin: *');
+
+        return $view;
+    }
 }
