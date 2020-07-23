@@ -286,6 +286,34 @@ class ApiController extends FOSRestController
     /**
      * @ApiDoc(
      *   resource = true,
+     *   description = "kontzeptu baten zenbatekoa itzuli. Indarrean daudenak.",
+     *   statusCodes = {
+     *     200 = "Zuzena denean"
+     *   }
+     * )
+     *
+     * @return View
+     *
+     * @Annotations\View()
+     * @Get("/kontzeptua/{id}.{_format}")
+     */
+    public function getKontzeptuaAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        /* @var $kontzeptua AppBundle\Entity\Kontzeptua */
+        $kontzeptua = $em->getRepository('AppBundle:Kontzeptua')->find($id);
+
+        $view = View::create();
+        $view->setData(str_replace(',', '.', $kontzeptua->getKopuruaProd()));
+        header('content-type: application/json; charset=utf-8');
+        header('access-control-allow-origin: *');
+
+        return $view;
+    }
+
+    /**
+     * @ApiDoc(
+     *   resource = true,
      *   description = "Azterketa kategoria baten azterketan parte hartzeko tasa itzuli.",
      *   statusCodes = {
      *     200 = "Zuzena denean"
@@ -300,10 +328,8 @@ class ApiController extends FOSRestController
     public function getExamPricesAction($kodea)
     {
         /* 'Tasas según grupo azpiatalaren kodea azterketen prezioak bilatzeko
-         * Gero atal horretan kodea_prod 001, 002, 003 eta 004 izan behar dira.
-         * Bestela erreziboen aplikazioan categoriak ezingo ditu automatikoki hartu.
-         * Gainera "A1", "A2", "C1" eta "C2, E eta AP" izan behar dira zehazki
-         * 001, 002, 003, 004 erreziboen aplikazioak horrela suposatzen du direla.
+         * Gero erreziboen aplikazioan helbidea ezartzen da kontzeptu bakoitzeko
+         * eta behar den zenbatekoa itzultzen du. Zenbatekoa baino ez du itzultzen.
          */
         $azterketaAzpiatala = $this->container->getParameter('azterketa_azpiatala');
         $em = $this->getDoctrine()->getManager();
