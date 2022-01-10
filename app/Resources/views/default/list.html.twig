@@ -80,7 +80,11 @@
 	<div class="container-fluid alert alert-info" role="alert">{{ "La información ofrecida a continuación carece de validez jurídica y se ofrece sólo a efectos informativos" | trans }}</div>
 
 	<div class="container alert alert-warning">
-		<a href="{{ doc_path }}/calendario_fiscal_{{ app.request.locale }}.pdf">{{ "Calendario Fiscal %urtea%" | trans({'%urtea%': '2021'}) | upper }}</a>
+		{% set url = 'https://e-udala.amorebieta-etxano.eus/siac/Info.aspx?info=calendario_fiscal' %}
+		{% if app.request.locale == 'eu' %}
+			{% set url = url ~ '&lang=eu-ES' %}
+		{% endif %}
+		<a href="{{ url }}" target="_blank">{{ "Calendario Fiscal" | trans | upper }}</a>
 	</div>
 
 	<ul id="ulzzoo"></ul>
@@ -172,4 +176,4 @@ $('[data-toggle="tooltip"]').tooltip();
 });
 </script>
 
-{% endblock%}
+{% endblock %}
