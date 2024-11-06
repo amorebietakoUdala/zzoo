@@ -1,0 +1,242 @@
+{% extends 'raw.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .popover {
+            z-index: 9999 !important;
+        }
+
+        .popover .editable-buttons {
+            margin-left: 15px !important;
+        }
+
+        .divAkzioak {
+            display: block;
+            height: 18px;
+            text-align: right;
+        }
+    </style>
+{% endblock %}
+
+{% block izenburua %}{{ udala.izenaeu }}{% endblock %}
+
+{% block body %}
+
+<div style="margin: auto;">
+
+    <div class="row">&nbsp;</div>
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4 text-center">
+            <img src="{{ udala.logoa }}"/>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+    <div class="row"></div>
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4 text-center">
+            <h3 style="text-align:center">{{ udala.izendapenaeu }}</h3>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+    <div class="row">&nbsp;</div>
+    <div class="row">&nbsp;</div>
+    <div class="row">&nbsp;</div>
+
+</div>
+<p style="margin-bottom: 0cm; line-height: 100%; page-break-before: always"></p>
+{% for ordenantza in ordenantzas %}
+
+        <div class="row">&nbsp;</div>
+
+        <div class="row ordenantza">
+            <div class="col-xs-6">
+                <h4 class="row-fluid col-md-12">
+                    <span class="col-md-1 text-left" style="display: block;">{{ ordenantza.kodea }}</span>
+                    <span class="col-md-10 text-left" style="display: block;">{{ ordenantza.izenburuaeu }}</span>
+                </h4>
+            </div>
+            <div class="col-xs-6">
+                <h4 class="row-fluid col-md-12">
+                    <span class="col-md-1 text-left" style="display: block;">{{ ordenantza.kodea }}</span>
+                    <span class="ordenantza col-md-10 text-left" style="display: block;">{{ ordenantza.izenburuaes }}</span>
+                </h4>
+            </div>
+        </div>
+        <div class="row">&nbsp;</div>
+
+        {% for p in ordenantza.parrafoak if p.ezabatu != 1 %}
+            <div class="row ordenantzaparrafoa">
+                <div class="col-xs-6">
+                    <div class="divTextua">
+                        <span class="" style="display: block;">{{ p.testuaeu | raw }}</span>
+                    </div>
+                </div>
+                <div class="col-xs-6">
+                    <div class="divTextua">
+                        <span class="" style="display: block;">{{ p.testuaes | raw }}</span>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
+        <div class="row">&nbsp;</div>
+
+        {% for atala in ordenantza.atalak if atala.ezabatu!= 1 %}
+            {% if atala.utsa != 1 %}
+                <div class="row atala">
+                    <div class="col-xs-6">
+                        <h3 class="row-fluid col-md-12" id="{{ atala.kodea }}">
+                        <span class="col-md-1 text-left" style="display: block;">
+                            {{ atala.kodea }}
+                        </span>
+                            <span class="col-md-1 text-left">-</span>
+                            <span class="col-md-10 text-left" style="display: block;">
+                            {{ atala.izenburuaeu |raw}}
+                        </span>
+                        </h3>
+                    </div>
+                    <div class="col-xs-6">
+                        <h3 class="row-fluid col-md-12">
+                        <span class="col-md-1 text-left" style="display: block;">
+                            {{ atala.kodea }}
+                        </span>
+                            <span class="col-md-1 text-left">-</span>
+                            <span class="col-md-10 text-left" style="display: block;">
+                            {{ atala.izenburuaes |raw }}
+                        </span>
+                        </h3>
+                    </div>
+                </div>
+
+                {% for p in atala.parrafoak  if p.ezabatu!= 1 %}
+                    <div class="row atalaparrafoa">
+                        <div class="divEditable col-xs-6">
+                            <div class="divEditableatalaparrafoa">
+                                <div class="divTextua" id="atalaparrafoa{{ p.id }}">
+                                    <span class="" style="display: block;">{{ p.testuaeu | raw }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="divEditable col-xs-6">
+                            <div class="divEditable">
+                                <div class="divTextua">
+                                <span class="" style="display: block;">{{ p.testuaes | raw }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            {# Naiz eta Atalik ez izan, azpiatalak izan ditzake. Atala utsa=1 delarik:#}
+            <div class="row">&nbsp;</div>
+
+            {% for azpiatala in atala.azpiatalak  if azpiatala.ezabatu!= 1 %}
+                <table class="table table-hover table-responsive table-bordered">
+                    <th colspan="2" class="row-fluid col-xs-6" id="{{ atala.kodea ~ azpiatala.kodea }}">
+                        <h4 class="row-fluid col-md-12">
+                        <span class="col-md-1 text-left" style="display: block;">
+                            {{ azpiatala.kodea }}
+                        </span>
+                            <span class="col-md-1 text-left">-</span>
+                            <span class="col-md-10 text-left" tabindex="-1" style="display: block;">
+                            {{ azpiatala.izenburuaeu|raw }}
+                        </span>
+                        </h4>
+                    </th>
+                    <th colspan="2" class="row-fluid col-xs-6">
+                        <h4 class="row-fluid col-md-12">
+                        <span class="col-md-1 text-left" tabindex="-1" style="display: block;">
+                            {{ azpiatala.kodea }}
+                        </span>
+                            <span class="col-md-1 text-left">-</span>
+                            <span class="col-md-10 text-left" style="display: block;">
+                            {{ azpiatala.izenburuaes|raw }}
+                        </span>
+                        </h4>
+                    </th>
+                    <tbody>
+                    <tr>
+                        <td colspan="4">
+                            {% for p in azpiatala.parrafoak  if p.ezabatu!= 1 %}
+                                <div class="row azpiatala">
+                                    <div class="divEditable col-xs-6">
+                                        <div class="divEditableazpiatalaparrafoa">
+                                            <div class="divTextua" id="azpiatalaparrafoa{{ p.id }}">
+                                            <span class="" style="display: block;">{{ p.testuaeu | raw }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="divEditable col-xs-6">
+                                        <div class="divEditableazpiatalaparrafoa">
+                                            <div class="divTextua">
+                                            <span class="" style="display: block;">{{ p.testuaes | raw }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    {% if azpiatala.kontzeptuak %}
+                        <tr>
+                            <td colspan="4" class="text-center">
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-10">
+                                        <table class="table table-hover table-responsive table-bordered text-left" width="90%">
+                                            {% for k in azpiatala.kontzeptuak  if k.ezabatu!= 1 %}
+                                                <tr>
+                                                    <td class="col-md-5">
+                                                        <div>
+                                                            <span>{{ k.kontzeptuaeu }} {% if k.baldintza %}( {{ k.baldintza.baldintzaeu }} ){% endif %}</span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="col-md-2">
+                                                        <span>{{ k.kopurua }}</span>
+                                                        <span>{{ k.unitatea }}</span>
+                                                    </td>
+                                                    <td class="col-md-5">
+                                                        <div>
+                                                            <span>{{ k.kontzeptuaes }} {% if k.baldintza %}( {{ k.baldintza.baldintzaes }} ){% endif %}</span>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </table>
+                                    </div>
+                                    <div class="col-md-1"></div>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endif %}
+                    </tbody>
+                </table>
+
+                {% for p in azpiatala.parrafoakondoren  if p.ezabatu!= 1 %}
+                    <div class="row ordenantzaparrafoa">
+                        <div class="col-xs-6">
+                            <div class="divTextua">
+                                {{ p.testuaeu | raw }}
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="divTextua">
+                                {{ p.testuaes | raw }}
+                            </div>
+                        </div>
+                    </div>
+
+                {% endfor %}
+
+            {% endfor %}
+
+        {% endfor %}
+
+
+
+
+{% endfor %}
+{% endblock %}

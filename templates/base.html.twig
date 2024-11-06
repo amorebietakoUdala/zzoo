@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="{{ app.request.locale}}">
+<head>
+
+    <title>{% block izenburua %}Zerga Ordenantzak {% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {% block stylesheets %}
+        <!-- Bootstrap -->
+        <link href="{{ asset('bundles/css/bootstrap.min.css') }}" rel="stylesheet" media="screen">
+        <link href="{{ asset('bundles/css/backend.css') }}" rel="stylesheet" media="screen">
+
+        <!-- HTML5 Shim and Respond.js add IE8 support of HTML5 elements and media queries -->
+        {% include 'BraincraftedBootstrapBundle::ie8-support.html.twig' %}
+        <style>
+            /* Make inline editables take the full width of their parents */
+            .editable-container.editable-inline,
+            .editable-container.editable-inline .control-group.form-group,
+            .editable-container.editable-inline .control-group.form-group .editable-input,
+            .editable-container.editable-inline .control-group.form-group .editable-input textarea,
+            .editable-container.editable-inline .control-group.form-group .editable-input select,
+            .editable-container.editable-inline .control-group.form-group .editable-input input:not([type=radio]):not([type=checkbox]):not([type=submit]) {
+                width: 100%;
+            }
+
+            .editable-click, a.editable-click, a.editable-click:hover {
+                border-bottom: none !important;
+            }
+
+            .marginBottom-0 {
+                margin-bottom: 0;
+            }
+
+
+        </style>
+    {% endblock %}
+</head>
+
+<body data-spy="scroll">
+
+<div>
+    {% block menua %}{% endblock %}
+    {% block body %}{% endblock %}
+</div> <!-- /container -->
+
+{% block javascripts %}
+    <!-- jQuery (necessary for Bootstraps JavaScript plugins) -->
+    <script src="{{ asset('bundles/js/jquery.js') }}"></script>
+    <!-- Include all JavaScripts, compiled by Assetic -->
+    <script src="{{ asset('bundles/js/bootstrap.js') }}"></script>
+
+{% endblock %}
+</body>
+</html>
