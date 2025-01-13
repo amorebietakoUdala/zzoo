@@ -80,9 +80,10 @@
 	<div class="container-fluid alert alert-info" role="alert">{{ "La información ofrecida a continuación carece de validez jurídica y se ofrece sólo a efectos informativos" | trans }}</div>
 
 	<div class="container alert alert-warning">
-		{% set url = 'https://e-udala.amorebieta-etxano.eus/siac/Info.aspx?info=calendario_fiscal' %}
 		{% if app.request.locale == 'eu' %}
-			{% set url = url ~ '&lang=eu-ES' %}
+			{% set url = 'https://amorebieta-etxano.eus/wp-content/uploads/2025/01/Egutegi_fiskala.jpg' %}
+		{% else %}
+			{% set url = 'https://amorebieta-etxano.eus/wp-content/uploads/2025/01/Calendario_fiscal.jpg' %}
 		{% endif %}
 		<a href="{{ url }}" target="_blank">{{ "Calendario Fiscal" | trans | upper }}</a>
 	</div>

@@ -88,6 +88,7 @@
 
         /**
          * @var bool
+         * @Expose
          *
          * @ORM\Column(name="ezabatu", type="boolean", nullable=true)
          */
